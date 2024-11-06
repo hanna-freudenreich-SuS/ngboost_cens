@@ -1,16 +1,16 @@
 import numpy as np
 import pandas as pd
 from pyhere import here
-import ngboost_module as ngm
-# from ngboost_module.ngboost.scores import LogScore, CRPScore
-# from ngboost_module.ngboost.distns.normal import Normal as SimpleNormal
+
+from ngboost_cens.ngboost.scores import LogScore, CRPScore
+from ngboost_cens.ngboost.distns.normal import Normal as SimpleNormal
 from CropLearner import NgBoostLearner
 #from ngboost import NGBRegressor, NGBCensored
 # from sklearn.datasets import load_boston
 # from sklearn.model_selection import train_test_split
 # from sklearn.metrics import mean_squared_error
 #from jax.ops import index_update, index
-#from ngboost.censored import CensoredOutcome
+from ngboost_cens.ngboost.censored import CensoredOutcome
 
 # load our data
 
@@ -42,7 +42,7 @@ def censor_admin(y, lower=-np.inf, upper=np.inf):
         censored = np.array([lower, upper])*np.ones((len(y), 2))
     else: 
         raise ValueError('input type not supported')
-    return ngm.CensoredOutcome(
+    return ensoredOutcome(
         observed, # contains np.nan where observation was censored 
         censored  # for rows where censored, contains the lower and upper bounds of the censoring interval (e.g. [-inf, b] for a row left-censored at b). Rows where `observed` is not np.nan are ignored.
     )  
