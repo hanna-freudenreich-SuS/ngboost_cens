@@ -16,7 +16,7 @@ from ngboost.learners import default_tree_learner
 from ngboost.manifold import manifold
 from ngboost.ngboost import NGBoost
 from ngboost.scores import LogScore
-
+from ngboost.censored import CensoredOutcome
 
 class NGBRegressor(NGBoost, BaseEstimator):
     """
@@ -323,3 +323,16 @@ class NGBSurvival(NGBoost, BaseEstimator):
             Y_val=Y_from_censored(T_val, E_val),
             **kwargs,
         )
+
+
+class NGBCensored(NGBRegressor):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs, censored=True)
+
+    def check_X_y(self, X, Y):
+        X = check_array(X)
+        assert (
+            type(Y) is CensoredOutcome
+        ), f"Y must be a ngboost.censored.CensoredOutcome object"
+
+        return X, Y
